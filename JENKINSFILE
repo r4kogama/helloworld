@@ -1,0 +1,25 @@
+pipeline{
+    agent {
+        node {
+            label 'Master' 
+            customWorkspace 'C:\\unir\\tareas\\noviembre\\workspace\\practica1\\cp1.1'
+        }
+    }
+    stages{
+        stage('Get repo'){
+            steps{
+                echo 'access repo by private key ssh'
+                git branch : 'master',
+                    credentialsId : 'github-ssh',
+                    url: 'git@github.com:r4kogama/helloworld.git'
+            }
+        }
+        stage('build'){
+            steps{
+                echo 'Project folder...'
+                echo "${WORKSPACE}"
+                bat 'dir'
+            }
+        }
+    }
+}
