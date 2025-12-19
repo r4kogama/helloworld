@@ -1,0 +1,54 @@
+{
+  "filters": {
+    "untracked": 2,
+    "total": 2,
+    "passed": 2,
+    "marker_counts": {
+      "api": 2
+    }
+  },
+  "results": [
+    {
+      "test": "test_api_add",
+      "nodeid": "test/rest/api_test.py::TestApi::test_api_add",
+      "status": "passed",
+      "duration": 2.077760500000295,
+      "trace": null,
+      "error": null,
+      "markers": [
+        "api"
+      ],
+      "file": "test\\rest\\api_test.py",
+      "line": 17,
+      "stdout": "",
+      "stderr": "",
+      "timestamp": "2025-12-19T18:39:59.266852Z",
+      "screenshot": "screenshots",
+      "logs": [],
+      "worker": "main",
+      "links": [],
+      "flaky": false
+    },
+    {
+      "test": "test_api_sqrt",
+      "nodeid": "test/rest/api_test.py::TestApi::test_api_sqrt",
+      "status": "passed",
+      "duration": 0.11042620000080206,
+      "trace": null,
+      "error": null,
+      "markers": [
+        "api"
+      ],
+      "file": "test\\rest\\api_test.py",
+      "line": 27,
+      "stdout": "",
+      "stderr": "",
+      "timestamp": "2025-12-19T18:39:59.408312Z",
+      "screenshot": "screenshots",
+      "logs": [],
+      "worker": "main",
+      "links": [],
+      "flaky": false
+    }
+  ]
+}

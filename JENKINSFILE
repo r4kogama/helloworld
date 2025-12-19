@@ -14,11 +14,52 @@ pipeline{
                     url: 'git@github.com:r4kogama/helloworld.git'
             }
         }
+        stage('Dependencies'){
+            steps{
+                echo 'Instalacion de dependencias...'
+                bat 'python -m pip install --upgrade pytest pytest-html-plus'
+                echo '...generador de informes HTML unificados instalado.'
+            }
+        }
         stage('build'){
             steps{
                 echo 'Project folder...'
                 echo "${WORKSPACE}"
                 bat 'dir'
+            }
+        }
+        stage('Test'){
+            parallel{
+                stage('Unit_test'){
+                    steps{
+                        catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                            bat """
+                                set PYTHONPATH=${WORKSPACE}
+                                pytest test\\unit --junitxml=result-unit.xml --html-output=result-unit.html
+                            """
+                        }
+                    }
+                }
+                stage('Service'){
+                    steps{
+                        catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                            bat """
+                                set FLASK_APP=app\\api.py
+                                start flask run
+                                ping -n 10 127.0.0.1 > nul
+                                start /D ${WORKSPACE} java -jar C:\\unir\\tareas\\noviembre\\workspace\\wiremock\\wiremock-standalone-3.13.2.jar --port 9090 --root-dir test\\wiremock
+                                set PYTHONPATH=${WORKSPACE}
+                                pytest test\\rest --junitxml=result-rest.xml --html-output=result-rest.html
+                            """ 
+                        }
+                    }
+                }
+            }
+        }
+        stage('Result'){
+            steps{
+                junit '**/result-*.xml'
+                archiveArtifacts artifacts: '**/*.html', allowEmptyArchive: true
             }
         }
     }
