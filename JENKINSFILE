@@ -20,13 +20,6 @@ pipeline{
                 echo '...generador de informes HTML unificados instalado.'
             }
         }
-        stage('build'){
-            steps{
-                echo 'Project folder...'
-                echo "${WORKSPACE}"
-                bat 'dir'
-            }
-        }
         stage('Test'){
             parallel{
                 stage('Unit_test'){
