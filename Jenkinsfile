@@ -5,17 +5,10 @@ pipeline{
         }
     }
     stages{
-        stage('Get repo'){
-            steps{
-                echo 'access repo by private key ssh'
-                git branch : 'master',
-                    credentialsId : 'github-ssh',
-                    url: 'git@github.com:r4kogama/helloworld.git'
-            }
-        }
         stage('Build'){
             steps{
                 echo 'Simulando build...'
+                echo  WORKSPACE
                 bat 'dir'
             }
         }
