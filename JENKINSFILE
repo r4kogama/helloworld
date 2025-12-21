@@ -1,8 +1,7 @@
 pipeline{
     agent {
         node {
-            label 'Master' 
-            customWorkspace 'C:\\unir\\tareas\\noviembre\\workspace\\practica1\\cp1.1'
+            label 'Master'
         }
     }
     stages{
@@ -35,7 +34,7 @@ pipeline{
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                             bat """
                                 set PYTHONPATH=${WORKSPACE}
-                                pytest test\\unit --junitxml=result-unit.xml --html-output=result-unit.html
+                                pytest test\\unit --junitxml=report/result-unit.xml --html-output=report/unit
                             """
                         }
                     }
@@ -45,11 +44,11 @@ pipeline{
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                             bat """
                                 set FLASK_APP=app\\api.py
-                                start flask run
+                                start /B flask run
                                 ping -n 10 127.0.0.1 > nul
-                                start /D ${WORKSPACE} java -jar C:\\unir\\tareas\\noviembre\\workspace\\wiremock\\wiremock-standalone-3.13.2.jar --port 9090 --root-dir test\\wiremock
+                                start /B java -jar C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\wiremock\\wiremock-standalone-3.13.2.jar --port 9090 --root-dir test\\wiremock
                                 set PYTHONPATH=${WORKSPACE}
-                                pytest test\\rest --junitxml=result-rest.xml --html-output=result-rest.html
+                                pytest test\\rest --junitxml=report/result-rest.xml --html-output=report/rest
                             """ 
                         }
                     }
@@ -58,8 +57,8 @@ pipeline{
         }
         stage('Result'){
             steps{
-                junit '**/result-*.xml'
-                archiveArtifacts artifacts: '**/*.html', allowEmptyArchive: true
+                junit testResults: 'report/result-*.xml', allowEmptyResults: true
+                archiveArtifacts artifacts: 'report/**/*', allowEmptyArchive: true
             }
         }
     }
