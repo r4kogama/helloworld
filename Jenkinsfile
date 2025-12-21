@@ -13,6 +13,12 @@ pipeline{
                     url: 'git@github.com:r4kogama/helloworld.git'
             }
         }
+        stage('Build'){
+            steps{
+                echo 'Simulando build...'
+                bat 'dir'
+            }
+        }
         stage('Dependencies'){
             steps{
                 echo 'Instalacion de dependencias...'
